@@ -18,6 +18,7 @@ const Form = () => {
     email: "",
     state: "",
     city: "",
+    dob: "",  // 👈 added dob field in state
   });
 
   useEffect(() => {
@@ -42,7 +43,14 @@ const Form = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    saveFormData(form); // Just save, don't overwrite others
+
+    // Simple validation
+    if (!form.dob) {
+      alert("Please select your Date of Birth.");
+      return;
+    }
+
+    saveFormData(form);
     alert("Form saved!");
     navigate("/dashboard");
   };
@@ -105,6 +113,16 @@ const Form = () => {
               </option>
             ))}
         </select>
+
+        {/* DOB Date Picker */}
+        <input
+          type="date"
+          name="dob"
+          value={form.dob}
+          onChange={handleChange}
+          className="w-full p-2 mb-3 border rounded"
+          required
+        />
 
         <div className="flex justify-between">
           <button

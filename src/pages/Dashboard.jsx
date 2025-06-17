@@ -38,6 +38,7 @@ const Dashboard = () => {
                   <p><strong>Email:</strong> {form.email}</p>
                   <p><strong>State:</strong> {form.state}</p>
                   <p><strong>City:</strong> {form.city}</p>
+                  <p><strong>DOB:</strong> {form.dob ? form.dob : "N/A"}</p> {/* 👈 added DOB line */}
                 </div>
               ))}
               <Link

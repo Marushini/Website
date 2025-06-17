@@ -40,6 +40,7 @@ const ViewForms = () => {
               <th className="border px-2 py-1">Email</th>
               <th className="border px-2 py-1">State</th>
               <th className="border px-2 py-1">City</th>
+              <th className="border px-2 py-1">DOB</th> {/* 👈 added DOB column */}
               <th className="border px-2 py-1">Action</th>
             </tr>
           </thead>
@@ -50,6 +51,9 @@ const ViewForms = () => {
                 <td className="border px-2 py-1">{form.email}</td>
                 <td className="border px-2 py-1">{form.state}</td>
                 <td className="border px-2 py-1">{form.city}</td>
+                <td className="border px-2 py-1">
+                  {form.dob ? form.dob : "N/A"}
+                </td>
                 <td className="border px-2 py-1">
                   <button
                     onClick={() => handleDelete(index)}

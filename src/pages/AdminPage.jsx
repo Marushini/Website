@@ -37,14 +37,19 @@ const AdminPanel = () => {
     const updatedName = prompt("Enter new name:", formToEdit.name);
     const updatedState = prompt("Enter new state:", formToEdit.state);
     const updatedCity = prompt("Enter new city:", formToEdit.city);
+    const updatedDob = prompt(
+      "Enter new Date of Birth (YYYY-MM-DD):",
+      formToEdit.dob
+    );
 
-    if (updatedName && updatedState && updatedCity) {
+    if (updatedName && updatedState && updatedCity && updatedDob) {
       const updatedForms = [...allForms];
       updatedForms[originalIndex] = {
         ...formToEdit,
         name: updatedName,
         state: updatedState,
         city: updatedCity,
+        dob: updatedDob,
       };
       localStorage.setItem("formData", JSON.stringify(updatedForms));
       setAllForms(updatedForms);
@@ -54,16 +59,26 @@ const AdminPanel = () => {
   // Filter + Search + Sort Logic
   const filteredForms = allForms
     .filter((form) =>
-      (form.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        form.email?.toLowerCase().includes(searchTerm.toLowerCase()))
+      form.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      form.email?.toLowerCase().includes(searchTerm.toLowerCase())
     )
-    .filter((form) => (stateFilter === "all" ? true : form.state === stateFilter))
+    .filter((form) =>
+      stateFilter === "all" ? true : form.state === stateFilter
+    )
     .sort((a, b) => {
-      const valA = a[sortField]?.toLowerCase?.() ?? "";
-      const valB = b[sortField]?.toLowerCase?.() ?? "";
-      if (valA < valB) return sortOrder === "asc" ? -1 : 1;
-      if (valA > valB) return sortOrder === "asc" ? 1 : -1;
-      return 0;
+      if (sortField === "dob") {
+        const dateA = new Date(a.dob);
+        const dateB = new Date(b.dob);
+        if (dateA < dateB) return sortOrder === "asc" ? -1 : 1;
+        if (dateA > dateB) return sortOrder === "asc" ? 1 : -1;
+        return 0;
+      } else {
+        const valA = a[sortField]?.toLowerCase?.() ?? "";
+        const valB = b[sortField]?.toLowerCase?.() ?? "";
+        if (valA < valB) return sortOrder === "asc" ? -1 : 1;
+        if (valA > valB) return sortOrder === "asc" ? 1 : -1;
+        return 0;
+      }
     });
 
   const uniqueStates = [...new Set(allForms.map((form) => form.state))].filter(Boolean);
@@ -98,6 +113,7 @@ const AdminPanel = () => {
           >
             <option value="name">Sort by Name</option>
             <option value="state">Sort by State</option>
+            <option value="dob">Sort by DOB</option>
           </select>
           <select
             className="border rounded p-2"
@@ -118,7 +134,8 @@ const AdminPanel = () => {
                   f.name === form.name &&
                   f.email === form.email &&
                   f.state === form.state &&
-                  f.city === form.city
+                  f.city === form.city &&
+                  f.dob === form.dob
               );
 
               return (
@@ -131,6 +148,7 @@ const AdminPanel = () => {
                     <p><strong>Email:</strong> {form.email}</p>
                     <p><strong>State:</strong> {form.state}</p>
                     <p><strong>City:</strong> {form.city}</p>
+                    <p><strong>Date of Birth:</strong> {form.dob || "N/A"}</p>
                   </div>
                   <div className="space-x-2">
                     <button
